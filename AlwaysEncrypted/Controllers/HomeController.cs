@@ -2,6 +2,7 @@
 using AlwaysEncrypted.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Cryptography;
 
 namespace AlwaysEncrypted.Controllers
 {
@@ -23,9 +24,44 @@ namespace AlwaysEncrypted.Controllers
             return View(users);
         }
 
-        public IActionResult Privacy()
+        public IActionResult Create()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult AddUser(UserDTO user)
+        {
+            userProvider.AddUser(user);
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult Privacy()
+        {
+            var keys = new KeysModel();
+
+            using (Aes aesAlgorithm = Aes.Create())
+            {
+                aesAlgorithm.KeySize = 256;
+                aesAlgorithm.GenerateKey();
+
+                byte[] masterKey = aesAlgorithm.Key;
+                keys.MaskterKey = BitConverter.ToString(masterKey).Replace("-", "");
+                keys.MaskterKeyBase64 = Convert.ToBase64String(masterKey);
+
+                aesAlgorithm.GenerateKey();
+                byte[] encryptionKey = aesAlgorithm.Key;
+                keys.EncryptionKey = BitConverter.ToString(encryptionKey).Replace("-", ""); ;
+                keys.EncryptionKeyBase64 = Convert.ToBase64String(encryptionKey);
+
+                aesAlgorithm.Key = masterKey;
+                byte[] encryptedEncryptionKey = aesAlgorithm.EncryptEcb(encryptionKey, PaddingMode.None);
+
+                keys.EncryptedEncryptionKey = BitConverter.ToString(encryptedEncryptionKey).Replace("-", "");
+                keys.EncryptedEncryptionKeyBase64 = Convert.ToBase64String(encryptedEncryptionKey);
+            }
+
+            return View(keys);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -33,5 +69,6 @@ namespace AlwaysEncrypted.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

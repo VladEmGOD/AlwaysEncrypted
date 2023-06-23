@@ -6,7 +6,7 @@ using System.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var customProvider = new SettingsSqlColumnEncryptionKeyStoreProvider();
+var customProvider = new SettingsSqlColumnEncryptionKeyStoreProvider(builder.Configuration);
 var providers = new Dictionary<string, SqlColumnEncryptionKeyStoreProvider>
     {
         { "APP_SETTINGS_KEY_VAULT", customProvider},
@@ -19,7 +19,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IDbConnection>(_ =>
 {
     SqlConnectionStringBuilder strbldr = new SqlConnectionStringBuilder();
-    strbldr.DataSource = "DESKTOP-5EAGGSU";
+    strbldr.DataSource = ".\\sqlexpress";
     strbldr.InitialCatalog = "AlwaysEncrypted";
     strbldr.IntegratedSecurity = true;
     strbldr.ColumnEncryptionSetting = SqlConnectionColumnEncryptionSetting.Enabled;

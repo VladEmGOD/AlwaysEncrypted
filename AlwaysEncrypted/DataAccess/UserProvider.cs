@@ -9,11 +9,21 @@ namespace AlwaysEncrypted.DataAccess.Providers
 
         public UserProvider(IDbConnection db) => this.db = db;
 
+        public void AddUser(UserDTO user)
+        {
+            db.Query(Queries.AddUser, new { user.Email, user.Name });
+        }
+
         public IEnumerable<UserDTO> GetUsers() => db.Query<UserDTO>(Queries.GetAllUsers);
+
+
     }
 
     file static class Queries
     {
         public static string GetAllUsers = @"select * from Users";
+
+        public static string AddUser = @"INSERT INTO [dbo].[Users] ([Email], [Name]) values (@email, @name)";
+
     }
 }

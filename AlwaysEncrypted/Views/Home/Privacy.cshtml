@@ -1,6 +1,19 @@
-﻿@{
+﻿@model AlwaysEncrypted.Models.KeysModel
+
+@{
     ViewData["Title"] = "Privacy Policy";
 }
 <h1>@ViewData["Title"]</h1>
 
 <p>Use this page to detail your site's privacy policy.</p>
+
+<ul>
+    <li>--Master key: @Model.MaskterKey</li>
+    <li>--Master key b64: @Model.MaskterKeyBase64</li>
+
+    <li>--Encryption key: @Model.EncryptionKey</li>
+    <li>--Encryption key b64: @Model.EncryptionKeyBase64</li>
+
+    <li>--Enc Encryption key: @Model.EncryptedEncryptionKey</li>
+    <li>--Enc Encryption key b64: @Model.EncryptedEncryptionKeyBase64</li>
+</ul>

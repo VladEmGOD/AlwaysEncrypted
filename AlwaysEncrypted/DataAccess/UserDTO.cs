@@ -1,7 +1,9 @@
 ﻿namespace AlwaysEncrypted.DataAccess
 {
-    public record UserDTO(int Id, string Email, string Name)
+    public class UserDTO
     {
-        public override string ToString() => $"{Id} {Email} {Name}";
+        public int Id { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
     };
 }
