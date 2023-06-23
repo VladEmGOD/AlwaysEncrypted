@@ -1,4 +1,6 @@
 /****** Script for SelectTopNRows command from SSMS  ******/
+CREATE DATABASE AlwaysEncrypted
+use AlwaysEncrypted
 
 SELECT TOP (1000) [Id]
       ,[Email]
@@ -6,9 +8,7 @@ SELECT TOP (1000) [Id]
   FROM [AlwaysEncrypted].[dbo].[Users]
 
 
-CREATE DATABASE AlwaysEncrypted
-use AlwaysEncrypted
-CREATE COLUMN MASTER KEY LocalColumnMasterKey  
+CREATE COLUMN MASTER KEY DotNetLocalColumnMasterKey  
 WITH (  
     KEY_STORE_PROVIDER_NAME = N'APP_SETTINGS_KEY_VAULT',  
     KEY_PATH = N'Some path -_-'
@@ -23,10 +23,10 @@ select * from sys.column_master_keys
 --Enc Encryption key: B4FEC438EB4C742562FFF69BC502BD39F07737F45692A6A95B5DDAD0E6FC9C18
 --Enc Encryption key b64: tP7EOOtMdCVi//abxQK9OfB3N/RWkqapW13a0Ob8nBg=
 
-create COLUMN ENCRYPTION KEY LocalColumnEncKey   
+create COLUMN ENCRYPTION KEY DotNetLocalColumnEncKey   
 WITH VALUES  
   (  
-    COLUMN_MASTER_KEY = LocalColumnMasterKey,   
+    COLUMN_MASTER_KEY = DotNetLocalColumnMasterKey,   
     ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256',   
     ENCRYPTED_VALUE = 0xB4FEC438EB4C742562FFF69BC502BD39F07737F45692A6A95B5DDAD0E6FC9C18
   )   
@@ -38,7 +38,7 @@ DROP TABLE [dbo].[Users]
 
 create TABLE [dbo].[Users](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Email] [nchar](4000) ENCRYPTED WITH (ENCRYPTION_TYPE = Randomized , ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256', COLUMN_ENCRYPTION_KEY = LocalColumnEncKey) NULL,
+	[Email] [nchar](4000) ENCRYPTED WITH (ENCRYPTION_TYPE = Randomized , ALGORITHM = 'AEAD_AES_256_CBC_HMAC_SHA_256', COLUMN_ENCRYPTION_KEY = DotNetLocalColumnEncKey) NULL,
 	[Name] [nchar](4000) NULL
 ) ON [PRIMARY]
 GO
