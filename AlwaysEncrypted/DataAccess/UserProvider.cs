@@ -7,16 +7,19 @@ namespace AlwaysEncrypted.DataAccess.Providers
     {
         private readonly IDbConnection db;
 
-        public UserProvider(IDbConnection db) => this.db = db;
+        public UserProvider(IDbConnection db) { this.db = db; }
 
         public void AddUser(UserDTO user)
         {
             db.Query(Queries.AddUser, new { user.Email, user.Name });
         }
 
-        public IEnumerable<UserDTO> GetUsers() => db.Query<UserDTO>(Queries.GetAllUsers);
+        public IEnumerable<UserDTO> GetUsers()
+        {
 
 
+            return db.Query<UserDTO>(Queries.GetAllUsers, new { Email = "Aboba" });
+        }
     }
 
     file static class Queries

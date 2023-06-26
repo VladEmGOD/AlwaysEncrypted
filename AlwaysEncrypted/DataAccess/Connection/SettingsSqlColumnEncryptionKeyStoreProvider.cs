@@ -5,11 +5,6 @@ namespace AlwaysEncrypted.DataAccess.Connection
 {
     public class SettingsSqlColumnEncryptionKeyStoreProvider : SqlColumnEncryptionKeyStoreProvider
     {
-        private class AlwaysEncryptedKeys
-        {
-            public string MasterKey { get; set; }
-        }
-
         private readonly IConfiguration configuration;
         public SettingsSqlColumnEncryptionKeyStoreProvider(IConfiguration configuration) => this.configuration = configuration;
 

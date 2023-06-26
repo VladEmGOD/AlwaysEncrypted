@@ -19,10 +19,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IDbConnection>(_ =>
 {
     SqlConnectionStringBuilder strbldr = new SqlConnectionStringBuilder();
-    strbldr.DataSource = ".\\sqlexpress";
+    strbldr.DataSource = "DESKTOP-5EAGGSU";
     strbldr.InitialCatalog = "AlwaysEncrypted";
     strbldr.IntegratedSecurity = true;
     strbldr.ColumnEncryptionSetting = SqlConnectionColumnEncryptionSetting.Enabled;
+    //strbldr.AttestationProtocol = SqlConnectionAttestationProtocol.NotSpecified;
     var conn = new SqlConnection(strbldr.ConnectionString);
 
     return conn;
